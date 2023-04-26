@@ -12,8 +12,7 @@
 // Note: Appropriated from the TT script, available at
 // https://github.com/Mephiles/torntools_extension/blob/master/extension/scripts/features/shops-fill-max/ttShopsFillMax.js
 let items = document.querySelectorAll(".item-desc");
-if ([...items].length === 0) setTimeout(() => items = document.querySelectorAll(".item-desc"), 5000);
-console.log(items);
+
 [...items].forEach((item) => {
 	const fillMaxButton = document.createElement("button");
 	fillMaxButton.innerText = "Fill MAX";
@@ -39,7 +38,6 @@ console.log(items);
 			}
 		})();
 		const max = [Math.floor(moneyOnHand / price), stock, 100].sort((a, b) => a - b)[0];
-		console.log(`Math.floor(money: ${moneyOnHand} / price: ${price}) = ${Math.floor(moneyOnHand / price)}`, stock);
 		item.querySelector("input").value = max;
 	}
 });
