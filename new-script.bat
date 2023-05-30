@@ -1,9 +1,11 @@
 @echo off
 
 set /p "name=Set Userscript Name: "
-set /p "description=Set Userscript Description: "
-set filename = "%name%.pda.user.js"
+if not defined name call :Error "No name provided, exiting..."
+if exist %name%.pda.user.js call :Error "The script %name%.pda.user.js already exists, cancelling..."
 
+
+set /p "description=Set Userscript Description: "
 (
 echo // ==UserScript==
 echo // @name         %name%
@@ -16,5 +18,10 @@ echo // @grant        none
 echo // ==/UserScript==
 )>%name%.pda.user.js
 
-echo The file %name%.pda.user.js has been created. Press any key to continue...
-pause >nul
+echo The file %name%.pda.user.js has been created.
+exit /b
+
+:Error 
+echo:
+echo %~1
+exit
