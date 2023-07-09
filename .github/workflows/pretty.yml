@@ -9,6 +9,7 @@ on:
             - "**.css"
             - "**.html"
             - "**.md"
+    workflow_dispatch:
 
 jobs:
     prettier:
