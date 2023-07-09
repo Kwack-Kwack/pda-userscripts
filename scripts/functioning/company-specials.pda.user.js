@@ -31,42 +31,44 @@ const companySpecialsDataURL = `https://raw.githubusercontent.com/Kwack-Kwack/pd
  *
  */
 const PDA_httpGet = async (url) => {
-    // @ts-expect-error
-    return flutter.inapp_webview.callHandler("PDA_httpGet", url);
+	// @ts-expect-error
+	return flutter.inapp_webview.callHandler("PDA_httpGet", url);
 };
 const getCompanySpecialsData = async (force) => {
-    const local = JSON.parse(localStorage.getItem("kw--company-specials-data"));
-    if (force || !local || typeof local.updateAt !== "number" || local.updateAt < Date.now()) {
-        return await PDA_httpGet(companySpecialsDataURL)
-            .then((res) => JSON.parse(res.responseText))
-            .then((res) => {
-            const data = { data: res, updateAt: Date.now() + 1000 * 60 * 60 * 24 * 7 };
-            localStorage.setItem("kw--company-specials-data", JSON.stringify(data));
-            console.log(force ? "Company Specials Data Force-Updated" : "Company Specials Data Updated");
-            return data;
-        });
-    }
-    else
-        return local;
+	const local = JSON.parse(localStorage.getItem("kw--company-specials-data"));
+	if (force || !local || typeof local.updateAt !== "number" || local.updateAt < Date.now()) {
+		return await PDA_httpGet(companySpecialsDataURL)
+			.then((res) => JSON.parse(res.responseText))
+			.then((res) => {
+				const data = { data: res, updateAt: Date.now() + 1000 * 60 * 60 * 24 * 7 };
+				localStorage.setItem("kw--company-specials-data", JSON.stringify(data));
+				console.log(force ? "Company Specials Data Force-Updated" : "Company Specials Data Updated");
+				return data;
+			});
+	} else return local;
 };
-const waitForElements = async () => new Promise((resolve, reject) => {
-    let count = 0;
-    const interval = setInterval(() => {
-        count++;
-        if (document.querySelector("div.company-details > div.title-black") &&
-            document.querySelector("div.company-details-wrap")) {
-            clearInterval(interval);
-            resolve();
-        }
-        else if (count > 200) {
-            clearInterval(interval);
-            reject("Waiting for elements timed out, there's a chance Torn changed their selectors. Contact me (Kwack [2190604]) if this is unexpected.");
-        }
-    }, 100);
-});
+const waitForElements = async () =>
+	new Promise((resolve, reject) => {
+		let count = 0;
+		const interval = setInterval(() => {
+			count++;
+			if (
+				document.querySelector("div.company-details > div.title-black") &&
+				document.querySelector("div.company-details-wrap")
+			) {
+				clearInterval(interval);
+				resolve();
+			} else if (count > 200) {
+				clearInterval(interval);
+				reject(
+					"Waiting for elements timed out, there's a chance Torn changed their selectors. Contact me (Kwack [2190604]) if this is unexpected.",
+				);
+			}
+		}, 100);
+	});
 (() => {
-    const s = document.createElement("style");
-    s.innerHTML = `
+	const s = document.createElement("style");
+	s.innerHTML = `
 	#kw--company-specials-container {
 		display: flex;
 		flex-direction: row;
@@ -97,37 +99,39 @@ const waitForElements = async () => new Promise((resolve, reject) => {
 		border-bottom: none;
 	}
 	`;
-    document.head.appendChild(s);
+	document.head.appendChild(s);
 })();
 Promise.all([getCompanySpecialsData(), waitForElements()])
-    .then(([companySpecialsData]) => {
-    const companyType = document
-        .querySelector("div.company-details > div.title-black")
-        ?.lastElementChild.textContent.substring(2);
-    const companySpecials = companySpecialsData.data[companyType];
-    // Create the specials content
-    const specialsContainer = document.createElement("div");
-    specialsContainer.id = "kw--company-specials-container";
-    for (const [stars, special] of Object.entries(companySpecials)) {
-        const specialContainer = document.createElement("div");
-        specialContainer.id = `kw--company-specials-${stars}`;
-        specialContainer.append(...[
-            `${special.name} (${stars}★)`,
-            special.cost === "Passive" ? "Passive" : `${special.cost} Point${special.cost === "1" ? "" : "s"}`,
-            special.effect,
-        ].map((text) => {
-            const e = document.createElement("p");
-            e.textContent = text;
-            return e;
-        }));
-        specialsContainer.append(specialContainer);
-    }
-    document.querySelector("div.company-details-wrap").insertAdjacentElement("afterend", specialsContainer);
-})
-    .catch((e) => {
-    console.error(e);
-    const error = document.createElement("div");
-    error.textContent = "Company Specials Error:" + typeof e === "string" ? e : JSON.stringify(e);
-    error.style.color = "red";
-    document.querySelector("div.company-details-wrap").insertAdjacentElement("afterend", error);
-});
+	.then(([companySpecialsData]) => {
+		const companyType = document
+			.querySelector("div.company-details > div.title-black")
+			?.lastElementChild.textContent.substring(2);
+		const companySpecials = companySpecialsData.data[companyType];
+		// Create the specials content
+		const specialsContainer = document.createElement("div");
+		specialsContainer.id = "kw--company-specials-container";
+		for (const [stars, special] of Object.entries(companySpecials)) {
+			const specialContainer = document.createElement("div");
+			specialContainer.id = `kw--company-specials-${stars}`;
+			specialContainer.append(
+				...[
+					`${special.name} (${stars}★)`,
+					special.cost === "Passive" ? "Passive" : `${special.cost} Point${special.cost === "1" ? "" : "s"}`,
+					special.effect,
+				].map((text) => {
+					const e = document.createElement("p");
+					e.textContent = text;
+					return e;
+				}),
+			);
+			specialsContainer.append(specialContainer);
+		}
+		document.querySelector("div.company-details-wrap").insertAdjacentElement("afterend", specialsContainer);
+	})
+	.catch((e) => {
+		console.error(e);
+		const error = document.createElement("div");
+		error.textContent = "Company Specials Error:" + typeof e === "string" ? e : JSON.stringify(e);
+		error.style.color = "red";
+		document.querySelector("div.company-details-wrap").insertAdjacentElement("afterend", error);
+	});

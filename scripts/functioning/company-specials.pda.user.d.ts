@@ -11,26 +11,26 @@ declare const companySpecialsDataVer = "v1";
  */
 declare const companySpecialsDataURL: string;
 type CompanySpecialsData = {
-    [key: string]: {
-        [key in "1" | "3" | "5" | "7" | "10"]: {
-            name: string;
-            cost: `${number}` | "Passive";
-            effect: string;
-        };
-    };
+	[key: string]: {
+		[key in "1" | "3" | "5" | "7" | "10"]: {
+			name: string;
+			cost: `${number}` | "Passive";
+			effect: string;
+		};
+	};
 };
 /**
  * @description This is a hacky fix to PDA failing to insert PDA_httpGet definitions. This will be removed once the injection is working correctly
  *
  */
 declare const PDA_httpGet: (url: string) => Promise<{
-    responseHeaders: string;
-    responseText: string;
-    status: number;
-    statusText: string;
+	responseHeaders: string;
+	responseText: string;
+	status: number;
+	statusText: string;
 }>;
 declare const getCompanySpecialsData: (force?: boolean) => Promise<{
-    data: CompanySpecialsData;
-    updateAt: number;
+	data: CompanySpecialsData;
+	updateAt: number;
 }>;
 declare const waitForElements: () => Promise<void | Error>;
