@@ -1,3 +1,4 @@
 building/
 
 *.ts
+!*.d.ts
