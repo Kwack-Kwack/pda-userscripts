@@ -1,0 +1,27 @@
+name: Pretty
+
+on:
+    push:
+        paths:
+            - "**.js"
+            - "**.ts"
+            - "**.jsonc?"
+            - "**.css"
+            - "**.html"
+            - "**.md"
+
+jobs:
+    prettier:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.head_ref }}
+
+            - name: Prettify code
+              uses: creyD/prettier_action@v4.3
+              with:
+                  prettier_options: . -w --config=./.prettierrc --ignore-path=./.prettierignore
+                  github_token: ${{secrets.GITHUB_TOKEN}}
