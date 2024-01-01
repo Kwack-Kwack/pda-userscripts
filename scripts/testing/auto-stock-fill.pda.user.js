@@ -94,4 +94,3 @@
 		alert(JSON.stringify(e));
 	}
 })();
-
