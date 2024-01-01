@@ -29,12 +29,16 @@ let items = document.querySelectorAll(".item-desc");
 		const stock = parseInt(item.querySelector("span.instock").innerText.replace(",", ""));
 		const price = parseInt(item.querySelector("span.price").innerText.replace(/[$,]/g, ""));
 		const moneyOnHand = (() => {
-			const str = document.querySelector("#user-money").innerText.replace(/[$,]/g, "")
+			const str = document.querySelector("#user-money").innerText.replace(/[$,]/g, "");
 			switch (str.slice(-1)) {
-				case "k": return parseFloat(str.slice(0, -1)) * 1000;
-				case "m": return parseFloat(str.slice(0, -1)) * 1000000;
-				case "b": return parseFloat(str.slice(0, -1)) * 1000000000
-				default: return parseFloat(str);
+				case "k":
+					return parseFloat(str.slice(0, -1)) * 1000;
+				case "m":
+					return parseFloat(str.slice(0, -1)) * 1000000;
+				case "b":
+					return parseFloat(str.slice(0, -1)) * 1000000000;
+				default:
+					return parseFloat(str);
 			}
 		})();
 		const max = [Math.floor(moneyOnHand / price), stock, 100].sort((a, b) => a - b)[0];
