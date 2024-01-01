@@ -1,4 +1,10 @@
 building/
 
+node_modules/
+package.json
+package-lock.json
+
 *.ts
 !*.d.ts
+
+testing/*.ts
