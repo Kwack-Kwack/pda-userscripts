@@ -15,6 +15,7 @@
 			});
 		else start();
 		async function start() {
+			console.log("Starting...");
 			const form = await getForm();
 			addButton(form);
 		}
@@ -22,6 +23,7 @@
 			return new URLSearchParams(document.location.hash.replaceAll(/[#\/]/g, ""));
 		}
 		function callback(form) {
+			console.log("callback()");
 			const storageCap = Array.from(form.querySelectorAll(".storage-capacity > *")).map((el, i) => {
 				if (!el.dataset.initial) {
 					console.log("No initial value: " + el.outerHTML);
@@ -45,18 +47,20 @@
 			});
 		}
 		function addButton(form) {
+			console.log("addButton()");
 			if ($("#kw-auto-fill").length > 0) return; // Do not inject button twice
 			$("<span/>", { class: "btn-wrap silver" })
 				.append(
 					$("<span/>", { class: "btn" }).append(
 						$("<button/>", { class: "torn-btn", id: "kw-auto-fill" })
 							.on("click", () => callback(form))
-							.text("Auto-fill"),
-					),
+							.text("Auto-fill")
+					)
 				)
 				.appendTo(form);
 		}
 		function getForm() {
+			console.log("getForm()");
 			return new Promise((res, rej) => {
 				let tick = 0;
 				const interval = setInterval(() => {
