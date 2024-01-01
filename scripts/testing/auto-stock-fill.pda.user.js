@@ -54,8 +54,8 @@
 					$("<span/>", { class: "btn" }).append(
 						$("<button/>", { class: "torn-btn", id: "kw-auto-fill" })
 							.on("click", () => callback(form))
-							.text("Auto-fill")
-					)
+							.text("Auto-fill"),
+					),
 				)
 				.appendTo(form);
 		}
