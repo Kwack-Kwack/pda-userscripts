@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         auto-stock-fill
-// @namespace    https://github.com/Kwack-Kwack/pda-userscripts
+// @namespace    dev.kwack.torn.scripts
 // @version      1.0.0
 // @description  Automatically fill your company's stock
 // @author       Kwack [2190604]
