@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         auto-stock-fill
 // @namespace    https://github.com/Kwack-Kwack/pda-userscripts
-// @version      0.0.2
+// @version      0.0.4
 // @description  Automatically fill your company's stock
 // @author       Kwack [2190604]
 // @match        https://www.torn.com/*
@@ -9,21 +9,23 @@
 // ==/UserScript==
 (async () => {
 	try {
-		if (getHashParams().get("option") !== "stock")
-			window.addEventListener("hashchange", () => {
-				if (getHashParams().get("option") === "stock") start();
-			});
-		else start();
+		// if (getHashParams().get("option") !== "stock")
+		// 	window.addEventListener("hashchange", () => {
+		// 		if (getHashParams().get("option") === "stock") start();
+		// 	});
+		// else start();
+		window.addEventListener("hashchange", (e) => {
+			if (getHashParams(new URL(e.newURL).hash).get("option") === "stock") start();
+		});
+		if (getHashParams(document.location.hash).get("option") === "stock") start();
 		async function start() {
-			console.log("Starting...");
 			const form = await getForm();
 			addButton(form);
 		}
-		function getHashParams() {
-			return new URLSearchParams(document.location.hash.replaceAll(/[#\/]/g, ""));
+		function getHashParams(hash) {
+			return new URLSearchParams(hash.replace(/[#\/]/g, ""));
 		}
 		function callback(form) {
-			console.log("callback()");
 			const storageCap = Array.from(form.querySelectorAll(".storage-capacity > *")).map((el, i) => {
 				if (!el.dataset.initial) {
 					console.log("No initial value: " + el.outerHTML);
@@ -47,20 +49,24 @@
 			});
 		}
 		function addButton(form) {
-			console.log("addButton()");
 			if ($("#kw-auto-fill").length > 0) return; // Do not inject button twice
 			$("<span/>", { class: "btn-wrap silver" })
 				.append(
 					$("<span/>", { class: "btn" }).append(
-						$("<button/>", { class: "torn-btn", id: "kw-auto-fill" })
+						$("<button/>", { class: "torn-btn" })
 							.on("click", () => callback(form))
 							.text("Auto-fill")
 					)
 				)
 				.appendTo(form);
+			// const button = document.createElement("button");
+			// button.textContent = "Auto-fill";
+			// button.className = "torn-btn";
+			// // button.style.cssText = "padding: 0.5rem; ";
+			// button.addEventListener("click", () => callback(form));
+			// form.appendChild(button);
 		}
 		function getForm() {
-			console.log("getForm()");
 			return new Promise((res, rej) => {
 				let tick = 0;
 				const interval = setInterval(() => {
@@ -88,3 +94,4 @@
 		alert(JSON.stringify(e));
 	}
 })();
+
