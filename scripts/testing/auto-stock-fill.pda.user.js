@@ -21,7 +21,7 @@
 	}
 	function callback(form) {
 		const storageCap = Array.from(form.querySelectorAll(".storage-capacity > *")).map((el) =>
-			getNumber(el.innerText)
+			getNumber(el.innerText),
 		);
 		const usableCap = storageCap[1] - storageCap[0];
 		const totalSoldDaily = getNumber(form.querySelector(".stock-list > li.total .sold-daily").textContent);
@@ -38,8 +38,8 @@
 				$("<span/>", { class: "btn" }).append(
 					$("<button/>", { class: "torn-btn", id: "kw-auto-fill" })
 						.on("click", () => callback(form))
-						.text("Auto-fill")
-				)
+						.text("Auto-fill"),
+				),
 			)
 			.appendTo(form);
 	}
