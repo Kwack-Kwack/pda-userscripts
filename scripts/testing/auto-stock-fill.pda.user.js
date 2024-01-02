@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         auto-stock-fill
 // @namespace    https://github.com/Kwack-Kwack/pda-userscripts
-// @version      1.0.1
+// @version      1.0.2
 // @description  Automatically fill your company's stock
 // @author       Kwack [2190604]
 // @match        https://www.torn.com/*
@@ -21,7 +21,7 @@
 	}
 	function callback(form) {
 		const storageCap = Array.from(form.querySelectorAll(".storage-capacity > *")).map((el) =>
-			getNumber(el.innerText),
+			getNumber(el.innerText)
 		);
 		const usableCap = storageCap[1] - storageCap[0];
 		const totalSoldDaily = getNumber(form.querySelector(".stock-list > li.total .sold-daily").textContent);
@@ -38,8 +38,8 @@
 				$("<span/>", { class: "btn" }).append(
 					$("<button/>", { class: "torn-btn", id: "kw-auto-fill" })
 						.on("click", () => callback(form))
-						.text("Auto-fill"),
-				),
+						.text("Auto-fill")
+				)
 			)
 			.appendTo(form);
 	}
